@@ -1,0 +1,15 @@
+flex:
+  api:
+    baseUrl: https://openapi.flex.team/v2
+
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 10
+      thread-name-prefix: schedule-task-pool-
+  profiles:
+    active:
+      - local
+
+

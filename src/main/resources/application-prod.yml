@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile:
+        - prod
+  datasource:
+    #mariadb
+    url: jdbc:mariadb://localhost:3306/atm
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: atm
+    password: atm
+  jpa:
+    hibernate:
+      ddl-auto: validate        # DB 초기화 전략 (none, create, create-drop, update, validate)
+
+logging:
+  level:
+    sql: error
+    root: info
+    com.zaxxer.hikari: ERROR
+
+server:
+  port: 8080
