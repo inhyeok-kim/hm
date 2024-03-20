@@ -1,9 +1,9 @@
 package com.seaweed.hm;
 
-import com.seaweed.hm.modules.family.FamilyEntity;
-import com.seaweed.hm.modules.family.FamilyRepository;
-import com.seaweed.hm.modules.user.UserEntity;
-import com.seaweed.hm.modules.user.UserRepository;
+import com.seaweed.hm.modules.family.model.FamilyEntity;
+import com.seaweed.hm.modules.family.repository.FamilyRepository;
+import com.seaweed.hm.modules.user.model.UserEntity;
+import com.seaweed.hm.modules.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -41,7 +41,7 @@ class HmApplicationTests {
 
 	@Test
 	void findFamily(){
-		familyRepository.findAll().forEach(familyEntity -> System.out.println(familyEntity.getId()));
+		familyRepository.findAll().forEach(familyEntity -> System.out.println(familyEntity.getUserList()));
 	}
 
 	@Test

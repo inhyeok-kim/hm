@@ -1,10 +1,9 @@
-package com.seaweed.hm.modules.user;
+package com.seaweed.hm.modules.user.model;
 
 import com.seaweed.hm.common.entity.DefaultEntity;
-import com.seaweed.hm.modules.family.FamilyEntity;
+import com.seaweed.hm.modules.family.model.FamilyEntity;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -24,6 +23,7 @@ public class UserEntity extends DefaultEntity {
         this.password = password;
     }
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private FamilyEntity family;
