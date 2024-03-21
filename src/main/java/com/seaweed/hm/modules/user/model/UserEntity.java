@@ -14,13 +14,11 @@ import lombok.ToString;
 @ToString
 public class UserEntity extends DefaultEntity {
     private String name;
-    private String loginId;
-    private String password;
+    private String uid;
 
-    public UserEntity(String name, String loginId, String password){
+    public UserEntity(String name, String uid){
         this.name = name;
-        this.loginId = loginId;
-        this.password = password;
+        this.uid = uid;
     }
 
     @ToString.Exclude
