@@ -2,11 +2,7 @@ package com.seaweed.hm;
 
 import com.seaweed.hm.modules.auth.model.AuthRegistDTO;
 import com.seaweed.hm.modules.auth.service.AuthService;
-import com.seaweed.hm.modules.family.model.FamilyEntity;
-import com.seaweed.hm.modules.family.repository.FamilyRepository;
-import com.seaweed.hm.modules.user.model.UserEntity;
-import com.seaweed.hm.modules.user.repository.UserRepository;
-import com.seaweed.hm.modules.user.service.UserService;
+import com.seaweed.hm.modules.user.model.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -20,22 +16,20 @@ import java.security.NoSuchAlgorithmException;
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("local")
-class HmApplicationTests {
+public class AuthTests {
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    AuthService authService;
 
-	@Autowired
-	UserRepository userRepository;
+    @Test
+    void testRegist() throws NoSuchAlgorithmException {
+        AuthRegistDTO authRegistDTO = new AuthRegistDTO("test","테스터",authService.encryptPassword("1234"));
+        authService.registUser(authRegistDTO);
+    }
 
-	@Autowired
-	FamilyRepository familyRepository;
-
-	@Autowired
-	AuthService authService;
-
-
-
-
-
+    @Test
+    void testLogin() throws NoSuchAlgorithmException {
+        UserDTO loginUser = authService.login("test",authService.encryptPassword("1234"));
+        System.out.println(loginUser);
+    }
 }

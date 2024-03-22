@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
     private long id;
-    private String loginId;
+    private String uid;
     private String name;
     private FamilyDTO family;
-    private String password;
+
     public UserDTO(UserEntity entity, boolean includeFamily){
         this.id = entity.getId();
-        this.loginId = entity.getLoginId();
+        this.uid = entity.getUid();
         this.name = entity.getName();
         if(includeFamily){
             FamilyDTO _family = new FamilyDTO(entity.getFamily(),false);
@@ -29,8 +29,7 @@ public class UserDTO {
     public UserEntity toEntity(){
         UserEntity entity = new UserEntity();
         entity.setName(this.name);
-        entity.setLoginId(this.loginId);
-        entity.setPassword(this.password);
+        entity.setUid(this.uid);
         if(this.family !=null){
             entity.setFamily(this.family.toEntity());
         }
