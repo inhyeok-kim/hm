@@ -1,5 +1,6 @@
 package com.seaweed.hm.common.config.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seaweed.hm.modules.auth.service.AuthService;
 import com.seaweed.hm.modules.user.model.UserDTO;
 import jakarta.servlet.*;
@@ -23,7 +24,7 @@ public class AuthFilter extends CustomFilter {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("Has No Auth");
+            response.getWriter().write("{\"code\" : -100, \"message\" : \"unAuthenticated\"}");
         }
 
     }

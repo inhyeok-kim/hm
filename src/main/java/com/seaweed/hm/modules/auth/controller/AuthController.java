@@ -1,11 +1,9 @@
 package com.seaweed.hm.modules.auth.controller;
 
 import com.seaweed.hm.common.controller.DefaultController;
-import com.seaweed.hm.modules.auth.model.AuthEntity;
 import com.seaweed.hm.modules.auth.model.AuthRegistDTO;
 import com.seaweed.hm.modules.auth.service.AuthService;
 import com.seaweed.hm.modules.user.model.UserDTO;
-import com.seaweed.hm.modules.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +33,12 @@ public class AuthController extends DefaultController {
 
         UserDTO newUser = authService.registUser(authRegistDTO);
         if(newUser == null){
-            return buildFailResponse();
+            return responseBuilder.responseFail();
         }
 
-        return buildResponse();
+        return responseBuilder.response();
     }
+
 
     @PostMapping("")
     public ResponseEntity login(
@@ -53,11 +52,26 @@ public class AuthController extends DefaultController {
 
         UserDTO loginUser = authService.login(loginId,authService.encryptPassword(password));
         if(loginUser == null){
-            return buildFailResponse("no matched id and password");
+            return responseBuilder.responseFail("no matched id and password");
         } else {
             request.getSession().setAttribute(AuthService.SESSION_LOGIN_NAME,loginUser);
         }
 
-        return buildResponse();
+        return responseBuilder.response();
     }
+
+
+    @GetMapping("")
+    public ResponseEntity check(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
+        UserDTO loginUser = getLoginUser();
+        if(loginUser == null) {
+            return responseBuilder.responseUnAuthenticated();
+        }
+
+        return responseBuilder.response(loginUser);
+    }
+
 }

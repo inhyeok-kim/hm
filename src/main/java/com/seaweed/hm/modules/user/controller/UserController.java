@@ -20,7 +20,7 @@ public class UserController extends DefaultController {
     )
     {
         UserDTO loginUser = getLoginUser();
-        return buildResponse(loginUser);
+        return responseBuilder.response(loginUser);
     }
 
 }
