@@ -9,9 +9,20 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: atm
     password: atm
+
   jpa:
+    show-sql: true
     hibernate:
-      ddl-auto: validate        # DB 초기화 전략 (none, create, create-drop, update, validate)
+      ddl-auto: update        # DB 초기화 전략 (none, create, create-drop, update, validate) 첫 구축시 create, 이후에는 validate
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      data-locations: classpath:/init/data.sql
+      mode: NEVER # ALWAYS, NEVER 첫 구축시 ALWAYS, 이후 NEVER
+
 
 logging:
   level:

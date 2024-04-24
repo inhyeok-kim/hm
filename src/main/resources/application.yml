@@ -1,7 +1,3 @@
-flex:
-  api:
-    baseUrl: https://openapi.flex.team/v2
-
 spring:
   task:
     scheduling:
@@ -12,4 +8,6 @@ spring:
     active:
       - local
 
-
+simple:
+  auth:
+    max-count: 0  # 0 : 무제한
