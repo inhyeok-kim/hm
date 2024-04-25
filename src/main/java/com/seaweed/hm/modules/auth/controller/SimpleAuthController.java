@@ -1,6 +1,6 @@
 package com.seaweed.hm.modules.auth.controller;
 
-import com.seaweed.hm.comm.abstracts.controller.DefaultController;
+import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.comm.component.http.session.SessionAuthenticationContext;
 import com.seaweed.hm.modules.auth.model.SimpleAuth;
 import com.seaweed.hm.modules.auth.usecase.SimpleAuthUsecase;
@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +16,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 @Slf4j
-public class SimpleAuthController extends DefaultController {
+public class SimpleAuthController{
 
     @Autowired
     private SimpleAuthUsecase simpleAuthUsecase;
 
     @PostMapping("")
-    public ResponseEntity login(
+    public APIResponse login(
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestBody Map body
@@ -31,35 +30,31 @@ public class SimpleAuthController extends DefaultController {
         String loginId = (String) body.get("loginId");
         String password = (String) body.get("password");
         if(!StringUtils.hasText((loginId)) || !StringUtils.hasText(password)){
-            return responseBuilder.responseBadError();
+            return APIResponse.builder().build();
         }
 
         SimpleAuth simpleAuth = simpleAuthUsecase.login(loginId, password);
 
         if(simpleAuth == null){
-            return responseBuilder.responseFail("no matched id and password");
+            return APIResponse.builder().code(-1).message("no matched id and password").build();
         } else {
-            try {
-                SessionAuthenticationContext.authenticate(request.getSession(),simpleAuth.getUserId(),simpleAuth.getType());
-            } catch (Exception e){
-                return responseBuilder.responseFail();
-            }
+            SessionAuthenticationContext.authenticate(request.getSession(),simpleAuth.getUserId(),simpleAuth.getType());
         }
 
-        return responseBuilder.response();
+        return APIResponse.builder().build();
     }
 
 
     @GetMapping("/check")
-    public ResponseEntity check(
+    public APIResponse check(
             HttpServletRequest request,
             HttpServletResponse response
     ){
 
         if(SessionAuthenticationContext.isAuthenticated(request.getSession())){
-            return responseBuilder.response();
+            return APIResponse.builder().build();
         } else {
-            return responseBuilder.responseUnAuthenticated();
+            return APIResponse.builder().code(APIResponse.Code.UN_AUTHENTICATED).build();
         }
     }
 

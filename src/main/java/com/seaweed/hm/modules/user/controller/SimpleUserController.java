@@ -2,12 +2,12 @@ package com.seaweed.hm.modules.user.controller;
 
 import com.seaweed.hm.comm.abstracts.controller.DefaultController;
 import com.seaweed.hm.comm.argument.LoginId;
+import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.modules.user.model.SimpleUserDTO;
 import com.seaweed.hm.modules.user.usecase.SimpleUserUsecase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +20,7 @@ public class SimpleUserController extends DefaultController {
     private SimpleUserUsecase simpleUserUsecase;
 
     @GetMapping("/me")
-    public ResponseEntity getMe(
+    public APIResponse getMe(
             @LoginId long loginId,
             HttpServletRequest request,
             HttpServletResponse response
@@ -28,9 +28,12 @@ public class SimpleUserController extends DefaultController {
     {
         SimpleUserDTO user = simpleUserUsecase.findUserById(loginId);
         if(user == null) {
-            return responseBuilder.responseFail("사용자 정보를 찾을 수 없습니다.");
+            return APIResponse.builder()
+                    .code(-1)
+                    .message("사용자 정보를 찾을 수 없습니다.")
+                    .build();
         }
-        return responseBuilder.response(user);
+        return APIResponse.builder().data(user).build();
     }
 
 }

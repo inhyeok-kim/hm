@@ -1,7 +1,9 @@
 package com.seaweed.hm.modules.sign.controller;
 
 import com.seaweed.hm.comm.abstracts.controller.DefaultController;
+import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.modules.sign.usecase.SimpleSignUsecase;
+import com.seaweed.hm.modules.user.exception.DuplicateUserUidException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,19 @@ public class SimpleSignController extends DefaultController {
     private SimpleSignUsecase simpleSignUsecase;
 
     @PostMapping("")
-    public ResponseEntity signOn(HttpServletRequest request, HttpServletResponse response,
-                                 @RequestBody Map body
+    public APIResponse signOn(HttpServletRequest request, HttpServletResponse response,
+                              @RequestBody Map body
     ) throws Exception {
         String loginId = (String) body.get("loginId");
         String name = (String) body.get("name");
         String password = (String) body.get("password");
 
-        simpleSignUsecase.sign(loginId, password, name);
-        return responseBuilder.response();
+        try {
+            simpleSignUsecase.sign(loginId, password, name);
+        } catch (DuplicateUserUidException de){
+            return APIResponse.builder().code(-1).message("중복된 아이디").build();
+        }
+        return APIResponse.builder().build();
     }
 
 }

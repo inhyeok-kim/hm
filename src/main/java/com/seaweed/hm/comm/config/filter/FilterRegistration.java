@@ -11,7 +11,7 @@ public class FilterRegistration {
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter(){
         FilterRegistrationBean<AuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         AuthenticationFilter filter = new AuthenticationFilter();
-        filter.setExcludeUrl(new String[]{"/auth","/sign","/h2-console","/api"});
+        filter.setExcludeUrl(new String[]{"/auth","/sign","/h2-console","/api","/favicon.ico"});
         registrationBean.setFilter(filter);
         registrationBean.setName("Authentication filter");
         registrationBean.addUrlPatterns("*");

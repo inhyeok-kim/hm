@@ -17,7 +17,7 @@ spring:
     database: H2
     show-sql: true
     hibernate:
-      ddl-auto: update        # DB 초기화 전략 (none, create, create-drop, update, validate)
+      ddl-auto: create        # DB 초기화 전략 (none, create, create-drop, update, validate)
     properties:
       hibernate:
         format_sql: true
@@ -25,7 +25,7 @@ spring:
   sql:
     init:
       data-locations: classpath:/init/data.sql
-      mode: NEVER # ALWAYS, NEVER
+      mode: ALWAYS # ALWAYS, NEVER
 
 logging:
   level:

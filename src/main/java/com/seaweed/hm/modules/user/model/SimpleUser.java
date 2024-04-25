@@ -1,19 +1,15 @@
 package com.seaweed.hm.modules.user.model;
 
+import com.seaweed.hm.comm.abstracts.model.DefaultDomain;
 import com.seaweed.hm.modules.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @Builder
-public class SimpleUser {
-    private Long id;
-    private LocalDateTime createAt;
-    private LocalDateTime modifiedAt;
+public class SimpleUser extends DefaultDomain {
     private String uid;
     private String name;
     private String email;
@@ -21,9 +17,9 @@ public class SimpleUser {
     private long familyId;
 
     public SimpleUser(UserEntity entity){
-        this.id = entity.getId();
-        this.createAt = entity.getCreateAt();
-        this.modifiedAt = entity.getModifiedAt();
+        super.id = entity.getId();
+        super.createAt = entity.getCreateAt();
+        super.modifiedAt = entity.getModifiedAt();
         this.uid = entity.getUid();
         this.name = entity.getName();
         this.email = entity.getEmail();
@@ -45,6 +41,9 @@ public class SimpleUser {
         return entity;
     }
 
+    public boolean hasFamily(){
+        return this.familyId > 0;
+    }
 
 
 }

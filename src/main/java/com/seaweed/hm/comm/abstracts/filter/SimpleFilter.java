@@ -2,10 +2,12 @@ package com.seaweed.hm.comm.abstracts.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Arrays;
 
+@Slf4j
 public abstract class SimpleFilter implements Filter {
     private String[] excludeUrl = {};
     public void setExcludeUrl(String[] excludeUrl){
