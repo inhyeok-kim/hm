@@ -12,7 +12,7 @@ import java.util.List;
 public class ItemClassDTO{
     private long id;
     private String name;
-    private String familyId;
+    private long familyId;
     private ItemClassType type;
     private List<ItemDTO> items;
 

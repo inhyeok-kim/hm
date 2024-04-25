@@ -12,4 +12,6 @@ public interface ItemClassRepository extends JpaRepository<ItemClassEntity,Long>
 
     @Query("SELECT c,i FROM itemClass c LEFT JOIN FETCH c.items i")
     List<ItemClassEntity> findAllJoinItem();
+
+    List<ItemClassEntity> findByFamilyId(long familyId);
 }

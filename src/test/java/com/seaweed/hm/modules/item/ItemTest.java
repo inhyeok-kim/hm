@@ -2,6 +2,7 @@ package com.seaweed.hm.modules.item;
 
 import com.seaweed.hm.modules.item.service.ItemClassService;
 import com.seaweed.hm.modules.item.service.ItemService;
+import com.seaweed.hm.modules.item.usecase.ItemUsecase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -19,6 +20,9 @@ public class ItemTest {
     @Autowired
     private ItemClassService itemClassService;
 
+    @Autowired
+    private ItemUsecase itemUsecase;
+
     @Test
     void test(){
         System.out.println(itemService.getItemList(1));
@@ -27,5 +31,10 @@ public class ItemTest {
     @Test
     void classTest(){
         System.out.println(itemClassService.getItemClassListAll());
+    }
+
+    @Test
+    void usecaseTest(){
+        System.out.println(itemUsecase.getItemClassListOfMyFamily(1));
     }
 }

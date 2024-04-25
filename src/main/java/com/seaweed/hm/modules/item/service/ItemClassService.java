@@ -19,4 +19,7 @@ public class ItemClassService {
         return itemClassRepository.findAllJoinItem().stream().map(ItemClassDTO::new).toList();
     }
 
+    public List<ItemClassDTO> getItemClassListByFamilyId(long familyId) {
+        return itemClassRepository.findByFamilyId(familyId).stream().map(ItemClassDTO::new).toList();
+    }
 }

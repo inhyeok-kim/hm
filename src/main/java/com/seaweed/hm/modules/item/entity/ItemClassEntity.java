@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 public class ItemClassEntity extends DefaultEntity {
     private String name;
-    private String familyId;
+    private long familyId;
 
     @Convert(converter = ItemClassTypeConverter.class)
     private ItemClassType type;
