@@ -1,11 +1,11 @@
 package com.seaweed.hm.modules.family.usecase;
 
 
+import com.seaweed.hm.modules.family.entity.Family;
 import com.seaweed.hm.modules.family.exception.FamilyContainsUserException;
 import com.seaweed.hm.modules.family.exception.UserHasFamilyException;
-import com.seaweed.hm.modules.family.model.Family;
 import com.seaweed.hm.modules.family.service.FamilyService;
-import com.seaweed.hm.modules.user.model.SimpleUser;
+import com.seaweed.hm.modules.user.entity.User;
 import com.seaweed.hm.modules.user.service.SimpleUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class FamilyUsecase {
      * @param userId
      */
     public void joinRequest(long familyId, long userId) throws FamilyContainsUserException, UserHasFamilyException {
-        SimpleUser user = simpleUserService.getUserById(userId);
+        User user = simpleUserService.getUserById(userId);
         if(user.hasFamily()){
             throw new UserHasFamilyException("가입된 가족이 존재합니다.");
         }

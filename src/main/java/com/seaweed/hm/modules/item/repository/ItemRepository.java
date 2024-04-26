@@ -1,14 +1,12 @@
 package com.seaweed.hm.modules.item.repository;
 
-import com.seaweed.hm.modules.item.entity.ItemEntity;
+import com.seaweed.hm.modules.item.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ItemRepository extends JpaRepository<ItemEntity, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    List<ItemEntity> findListByClassId(long classId);
+    List<Item> findListByClassId(long classId);
 
 }

@@ -15,9 +15,8 @@ public class SessionAuthenticationContext {
         return (long) session.getAttribute(SESSION_LOGIN_NAME) > 0;
     }
 
-    public static void authenticate(HttpSession session, long userId, String loginType) throws Exception {
+    public static void authenticate(HttpSession session, long userId) throws Exception {
         SimpleSessionContext.addLoginSession(userId,session);
         session.setAttribute(SESSION_LOGIN_NAME, userId);
-        session.setAttribute(SESSION_LOGIN_TYPE, loginType);
     }
 }

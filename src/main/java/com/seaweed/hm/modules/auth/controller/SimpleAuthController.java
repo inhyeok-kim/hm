@@ -2,7 +2,8 @@ package com.seaweed.hm.modules.auth.controller;
 
 import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.comm.component.http.session.SessionAuthenticationContext;
-import com.seaweed.hm.modules.auth.model.SimpleAuth;
+import com.seaweed.hm.modules.auth.dto.SimpleAuthDTO;
+import com.seaweed.hm.modules.auth.entity.SimpleAuth;
 import com.seaweed.hm.modules.auth.usecase.SimpleAuthUsecase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,12 +34,12 @@ public class SimpleAuthController{
             return APIResponse.builder().build();
         }
 
-        SimpleAuth simpleAuth = simpleAuthUsecase.login(loginId, password);
+        SimpleAuthDTO simpleAuth = simpleAuthUsecase.login(loginId, password);
 
         if(simpleAuth == null){
             return APIResponse.builder().code(-1).message("no matched id and password").build();
         } else {
-            SessionAuthenticationContext.authenticate(request.getSession(),simpleAuth.getUserId(),simpleAuth.getType());
+            SessionAuthenticationContext.authenticate(request.getSession(),simpleAuth.getUserId());
         }
 
         return APIResponse.builder().build();

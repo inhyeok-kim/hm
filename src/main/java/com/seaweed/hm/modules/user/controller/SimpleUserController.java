@@ -3,7 +3,7 @@ package com.seaweed.hm.modules.user.controller;
 import com.seaweed.hm.comm.abstracts.controller.DefaultController;
 import com.seaweed.hm.comm.argument.LoginId;
 import com.seaweed.hm.comm.component.http.response.APIResponse;
-import com.seaweed.hm.modules.user.model.SimpleUserDTO;
+import com.seaweed.hm.modules.user.dto.SimpleUserDTO;
 import com.seaweed.hm.modules.user.usecase.SimpleUserUsecase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

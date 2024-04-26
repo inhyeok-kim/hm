@@ -1,7 +1,7 @@
 package com.seaweed.hm.comm.config.filter;
 
 import com.seaweed.hm.comm.abstracts.filter.SimpleFilter;
-import com.seaweed.hm.modules.auth.model.Role;
+import com.seaweed.hm.modules.auth.enums.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

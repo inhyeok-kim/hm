@@ -1,4 +1,4 @@
-package com.seaweed.hm.modules.auth.model;
+package com.seaweed.hm.modules.auth.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

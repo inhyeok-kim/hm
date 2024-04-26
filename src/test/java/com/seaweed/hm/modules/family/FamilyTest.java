@@ -1,8 +1,7 @@
 package com.seaweed.hm.modules.family;
 
-import com.seaweed.hm.modules.family.entity.FamilyEntity;
-import com.seaweed.hm.modules.family.model.FamilyDTO;
-import com.seaweed.hm.modules.family.repository.FamilyRepository;
+import com.seaweed.hm.modules.family.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.entity.Family;
 import com.seaweed.hm.modules.family.service.FamilyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class FamilyTest {
 
     @Test
     void test(){
-        List<FamilyDTO> list = familyService.getFamilyListAll();
+        List<Family> list = familyService.getFamilyListAll();
         System.out.println(list);
     }
 

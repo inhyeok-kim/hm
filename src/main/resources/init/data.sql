@@ -4,11 +4,11 @@ VALUES (now(), '테스터1','test1','test1@seaweed.com','010-0000-0000',1)
     , (now(),'테스터3','test3','test3@seaweed.com','010-0000-0002',2);
 
 INSERT INTO SIMPLE_AUTH (create_at,login_id,password,user_id)
-VALUES (now(), 'test1','test1@seaweed.com','1')
-   , (now(),'test2','test2@seaweed.com','2')
-   , (now(),'test3','test3@seaweed.com','3');
+VALUES (now(), 'test1','test1@seaweed.com',1)
+   , (now(),'test2','test2@seaweed.com',2)
+   , (now(),'test3','test3@seaweed.com',3);
 
-INSERT INTO HM_FAMILY (create_at,name)
+INSERT INTO FAMILY (create_at,name)
 VALUES (now(), 'spyFamily')
  , (now(),'testFamily');
 

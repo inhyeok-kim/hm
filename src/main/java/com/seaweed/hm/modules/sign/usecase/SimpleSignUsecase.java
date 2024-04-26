@@ -1,10 +1,10 @@
 package com.seaweed.hm.modules.sign.usecase;
 
-import com.seaweed.hm.modules.auth.model.SimpleAuth;
+import com.seaweed.hm.modules.auth.entity.SimpleAuth;
 import com.seaweed.hm.modules.auth.service.SimpleAuthService;
 import com.seaweed.hm.modules.message.event.SimpleMessageEvent;
+import com.seaweed.hm.modules.user.entity.User;
 import com.seaweed.hm.modules.user.exception.DuplicateUserUidException;
-import com.seaweed.hm.modules.user.model.SimpleUser;
 import com.seaweed.hm.modules.user.service.SimpleUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,7 +28,7 @@ public class SimpleSignUsecase {
     @Transactional
     public void sign(String loginId, String password, String name) throws NoSuchAlgorithmException, DuplicateUserUidException {
         long userId = simpleUserService.registNewUser(
-                SimpleUser.builder()
+                User.builder()
                         .uid(loginId)
                         .name(name)
                         .build()
