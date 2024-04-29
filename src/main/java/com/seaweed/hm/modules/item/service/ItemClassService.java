@@ -1,7 +1,10 @@
 package com.seaweed.hm.modules.item.service;
 
+import com.seaweed.hm.comm.exception.UnAuthorizationException;
+import com.seaweed.hm.modules.item.dto.ItemClassDTO;
 import com.seaweed.hm.modules.item.entity.ItemClass;
 import com.seaweed.hm.modules.item.repository.ItemClassRepository;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +50,19 @@ public class ItemClassService {
      * @param itemClass
      * @return
      */
-    public long regist(ItemClass itemClass) {
-        return itemClassRepository.save(itemClass).getId();
+    public ItemClass regist(ItemClass itemClass) {
+        return itemClassRepository.save(itemClass);
     }
 
-    public ItemClass modify(ItemClass itemClass) {
-        return itemClassRepository.save(itemClass);
+    public ItemClass modify(ItemClass itemClass) throws NotFoundException {
+        if(itemClassRepository.findById(itemClass.getId()).isPresent()){
+            return itemClassRepository.save(itemClass);
+        } else {
+            throw new NotFoundException("");
+        }
+    }
+
+    public void remove(ItemClass itemClass) {
+        itemClassRepository.delete(itemClass);
     }
 }

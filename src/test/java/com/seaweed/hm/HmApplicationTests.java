@@ -5,13 +5,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(properties = "spring.profiles.active:local")
+@SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 class HmApplicationTests {
-
-
 
 
 

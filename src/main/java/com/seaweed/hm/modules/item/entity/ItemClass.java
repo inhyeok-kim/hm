@@ -4,18 +4,16 @@ import com.seaweed.hm.comm.abstracts.entity.DefaultEntity;
 import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.enums.ItemClassTypeConverter;
 import com.seaweed.hm.modules.item.enums.ItemType;
+import com.seaweed.hm.modules.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name="itemClass")
 @Table(name = "ITEM_CLASS")
-@Data
+@Getter
 @NoArgsConstructor
 @ToString
 public class ItemClass extends DefaultEntity {
@@ -28,26 +26,32 @@ public class ItemClass extends DefaultEntity {
     @OneToMany(mappedBy = "itemClass")
     private List<Item> items = new ArrayList<>();
 
-    @Builder
+    @Builder(builderMethodName = "registBuilder")
     public ItemClass(long createUserId,String name, long familyId, ItemClassType type){
-        System.out.println("createUserId : " + createUserId);
         this.name = name;
         this.familyId = familyId;
         this.createUserId = createUserId;
         this.type = type;
     }
 
-    public ItemClass modifyName(String name){
+    public ItemClass modifyName(long updateUserId, String name){
+        this.lastModifyUserId = updateUserId;
         this.name = name;
         return this;
     }
-    public ItemClass modifyType(ItemClassType type){
+    public ItemClass modifyType(long updateUserId, ItemClassType type){
+        this.lastModifyUserId = updateUserId;
         this.type = type;
         return this;
     }
 
-    public ItemClass modifyFamily(long familyId){
+    public ItemClass modifyFamily(long updateUserId, long familyId){
+        this.lastModifyUserId = updateUserId;
         this.familyId = familyId;
         return this;
+    }
+
+    public boolean isAccessible(User user){
+        return this.familyId == user.getFamilyId();
     }
 }
