@@ -1,16 +1,17 @@
 INSERT INTO SIMPLE_USER (create_at,name,uid,email,phone_number,family_id)
 VALUES (now(), '테스터1','test1','test1@seaweed.com','010-0000-0000',1)
     , (now(),'테스터2','test2','test2@seaweed.com','010-0000-0001',1)
-    , (now(),'테스터3','test3','test3@seaweed.com','010-0000-0002',2);
+    , (now(),'테스터3','test3','test3@seaweed.com','010-0000-0002',2)
+    , (now(),'테스터4','test4','test3@seaweed.com','010-0000-0002',0);
 
 INSERT INTO SIMPLE_AUTH (create_at,login_id,password,user_id)
 VALUES (now(), 'test1','6da4535039108c26c9d73f5f3c73f19d39c9134409dd01fe9953dd944442467f',1)
    , (now(),'test2','e67ca3cc5af4604dfb56b7008299a503095d74e50b5d6f3beccf541d5a6b29d5',2)
    , (now(),'test3','930c813cafe5adb6a5526ed22b26b5ef2da6a44c3bc1bb01485bea38c5cf475e',3);
 
-INSERT INTO FAMILY (create_at,name)
-VALUES (now(), 'spyFamily')
- , (now(),'testFamily');
+INSERT INTO FAMILY (create_at,name,invite_code)
+VALUES (now(), 'spyFamily','155eacf3-59c9-37cc-a76d-7b74ecf78297')
+ , (now(),'testFamily','8ea22333-2f38-42ce-ac19-89b5be5d69e6');
 
 INSERT INTO ITEM_CLASS (create_at, name,family_id, type)
 VALUES (now(), '휴지', 1, '1')

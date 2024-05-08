@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name="family")
 @Table(name = "FAMILY")
@@ -22,10 +23,23 @@ public class Family extends DefaultEntity {
     @OneToMany(mappedBy = "family")
     private List<User> users = new ArrayList<>();
 
+    private String inviteCode;
+
     @Builder
     public Family(long createUserId,String name){
         this.name = name;
         this.createUserId = createUserId;
+        this.inviteCode = createInviteCode();
+    }
+
+    private String createInviteCode(){
+//        String salt = "ivt-"+this.createUserId;
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
+    public void refreshInviteCode(){
+        this.inviteCode = createInviteCode();
     }
 
     public boolean containsUser(long id){

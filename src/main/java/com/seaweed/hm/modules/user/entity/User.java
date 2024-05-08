@@ -29,6 +29,10 @@ public class User extends DefaultEntity {
         return this.familyId > 0;
     }
 
+    public void joinFamily(long familyId){
+        this.familyId = familyId;
+    }
+
     @Builder
     public User(String name, String uid, String email, String phoneNumber){
         this.name = name;

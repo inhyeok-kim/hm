@@ -20,7 +20,7 @@ public class SimpleUserController extends DefaultController {
     private SimpleUserUsecase simpleUserUsecase;
 
     @GetMapping("/me")
-    public APIResponse getMe(
+    public APIResponse getMyInfo(
             @LoginId long loginId,
             HttpServletRequest request,
             HttpServletResponse response

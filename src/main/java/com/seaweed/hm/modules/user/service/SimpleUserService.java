@@ -6,6 +6,7 @@ import com.seaweed.hm.modules.user.exception.DuplicateUserUidException;
 import com.seaweed.hm.modules.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +24,7 @@ public class SimpleUserService extends DefaultService {
 
     public User getUserById(long id){
         Optional<User> userOpt = userRepository.findById(id);
-        if(userOpt.isPresent()){
-            return userOpt.get();
-        }
-        return null;
+        return userOpt.orElse(null);
     }
 
     /**
@@ -34,6 +32,7 @@ public class SimpleUserService extends DefaultService {
      * @param user
      * @return
      */
+    @Transactional
     public long registNewUser(User user) throws DuplicateUserUidException{
         Optional<User> checkUser = userRepository.findByUid(user.getUid());
         if(checkUser.isPresent()){
@@ -44,4 +43,9 @@ public class SimpleUserService extends DefaultService {
         return newUser.getId();
     }
 
+
+    @Transactional
+    public void updateUserFamily(User user) {
+        userRepository.updateFamily(user.getId(), user.getFamilyId());
+    }
 }
