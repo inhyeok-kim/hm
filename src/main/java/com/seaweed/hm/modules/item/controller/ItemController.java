@@ -79,7 +79,7 @@ public class ItemController {
             ItemDTO result = itemUsecase.createItem(loginId,dto.getName(),dto.getClassId(),dto.getType(),dto.getCount());
             return APIResponse.builder().data(result).build();
         } catch (UnAuthorizationException e) {
-            return APIResponse.builder().code(-1).message("소속된 가족이 없습니다.").build();
+            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
         }
     }
 
@@ -89,7 +89,7 @@ public class ItemController {
             ItemDTO result = itemUsecase.updateItem(loginId,dto);
             return APIResponse.builder().data(result).build();
         } catch (UnAuthorizationException e) {
-            return APIResponse.builder().code(-1).message("소속된 가족이 없습니다.").build();
+            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
         } catch (NotFoundException e) {
             return APIResponse.builder().code(-1).message("존재하지 않는 분류입니다.").build();
         }

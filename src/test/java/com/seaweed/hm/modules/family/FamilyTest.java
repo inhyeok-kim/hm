@@ -1,8 +1,11 @@
 package com.seaweed.hm.modules.family;
 
 import com.seaweed.hm.modules.family.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.dto.FamilyJoinReqDTO;
 import com.seaweed.hm.modules.family.dto.FamilyJoinUserDTO;
 import com.seaweed.hm.modules.family.entity.Family;
+import com.seaweed.hm.modules.family.entity.FamilyJoinReq;
+import com.seaweed.hm.modules.family.enums.FamilyJoinStatus;
 import com.seaweed.hm.modules.family.exception.UserHasFamilyException;
 import com.seaweed.hm.modules.family.service.FamilyService;
 import com.seaweed.hm.modules.family.usecase.FamilyUsecase;
@@ -42,6 +45,12 @@ public class FamilyTest {
         System.out.println(list.stream().map(FamilyDTO::new).toList());
     }
 
+    @Test
+    @Transactional
+    void testMyFamily(){
+        FamilyDTO familyDTO = familyUsecase.findMyFamily(4);
+    }
+
 
     @Test
     @Transactional
@@ -77,5 +86,17 @@ public class FamilyTest {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void testJoinRequest(){
+        List<FamilyJoinReqDTO> list = familyUsecase.getMyJoinRequest(4, FamilyJoinStatus.WAIT);
+        System.out.println(list);
+    }
+
+    @Test
+    void testFamilyJoinRequest(){
+        List<FamilyJoinReqDTO> list = familyUsecase.getMyFamilyJoinRequest(1, FamilyJoinStatus.WAIT);
+        System.out.println(list);
     }
 }

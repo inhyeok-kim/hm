@@ -2,7 +2,10 @@ package com.seaweed.hm.modules.family.usecase;
 
 
 import com.seaweed.hm.modules.family.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.dto.FamilyJoinReqDTO;
 import com.seaweed.hm.modules.family.entity.Family;
+import com.seaweed.hm.modules.family.entity.FamilyJoinReq;
+import com.seaweed.hm.modules.family.enums.FamilyJoinStatus;
 import com.seaweed.hm.modules.family.exception.FamilyContainsUserException;
 import com.seaweed.hm.modules.family.exception.UserHasFamilyException;
 import com.seaweed.hm.modules.family.service.FamilyService;
@@ -13,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class FamilyUsecase {
@@ -46,20 +49,45 @@ public class FamilyUsecase {
 
     /**
      * 사용자의 가족 가입 요청을 처리하는 usecase
-     * @param familyId
      * @param userId
+     * @param inviteCode
+     * @throws FamilyContainsUserException
+     * @throws UserHasFamilyException
      */
-    @Transactional
-    public void joinRequest(long familyId, long userId) throws FamilyContainsUserException, UserHasFamilyException {
+    public void joinRequest(long userId, String inviteCode) throws FamilyContainsUserException, UserHasFamilyException {
         User user = simpleUserService.getUserById(userId);
         if(user.hasFamily()){
             throw new UserHasFamilyException("이미 가입된 가족이 존재합니다.");
         }
-        Family family = familyService.getFamily(familyId);
+        Family family = familyService.getFamilyByInviteCode(inviteCode);
         if(family.containsUser(userId)){
-            throw new FamilyContainsUserException("이미 가입된 가족이 존재합니다.");
+            throw new FamilyContainsUserException("이미 가입된 가족입니다.");
         }
+        FamilyJoinReq req = FamilyJoinReq.NewRequest().familyId(family.getId()).userId(userId).build();
+        familyService.requestJoin(req);
     }
+
+    /**
+     * 사용자의 가족 가입 요청 목록을 가져오는 usecase
+     * @param loginId
+     * @param status
+     * @return
+     */
+    public List<FamilyJoinReqDTO> getMyJoinRequest(long loginId, FamilyJoinStatus status){
+        return familyService.getFamilyJoinReqByUser(loginId, status).stream().map(FamilyJoinReqDTO::new).toList();
+    }
+
+    /**
+     * 특정 가족의 가입 요청 목록을 가져오는 usecase
+     * @param loginId
+     * @param status
+     * @return
+     */
+    public List<FamilyJoinReqDTO> getMyFamilyJoinRequest(long loginId, FamilyJoinStatus status){
+        User user = simpleUserService.getUserById(loginId);
+        return familyService.getFamilyJoinReqByFamily(user.getFamilyId(), status).stream().map(FamilyJoinReqDTO::new).toList();
+    }
+
 
     /**
      * 사용자의 가족 정보를 가져오는 usecase
@@ -69,7 +97,7 @@ public class FamilyUsecase {
     public FamilyDTO findMyFamily(long loginId) {
         User user = simpleUserService.getUserById(loginId);
         Family myFamily = user.getFamily();
-        if(myFamily == null) return null;
+        if(!user.hasFamily()) return null;
         return new FamilyDTO(myFamily);
     }
 

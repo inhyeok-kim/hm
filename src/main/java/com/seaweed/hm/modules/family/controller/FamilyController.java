@@ -4,6 +4,8 @@ import com.seaweed.hm.comm.abstracts.controller.DefaultController;
 import com.seaweed.hm.comm.argument.LoginId;
 import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.modules.family.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.dto.FamilyJoinReqDTO;
+import com.seaweed.hm.modules.family.enums.FamilyJoinStatus;
 import com.seaweed.hm.modules.family.exception.FamilyContainsUserException;
 import com.seaweed.hm.modules.family.exception.UserHasFamilyException;
 import com.seaweed.hm.modules.family.usecase.FamilyUsecase;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -46,7 +50,7 @@ public class FamilyController extends DefaultController {
         return APIResponse.builder().build();
     }
 
-    @PostMapping("/refresh-ivt")
+    @GetMapping("/refresh-ivt")
     public APIResponse refreshIvt(
             @LoginId long id, HttpServletRequest req, HttpServletResponse res
     ) {
@@ -62,11 +66,11 @@ public class FamilyController extends DefaultController {
         return APIResponse.builder().data(inviteCode).build();
     }
 
-    @PostMapping("/join")
+    @PostMapping("/join-request")
     public APIResponse join(@LoginId long id, HttpServletRequest req, HttpServletResponse res, @RequestBody Map body){
-        long familyId = (long) body.get("familyId");
+        String inviteCode = (String) body.get("inviteCode");
         try {
-            familyUsecase.joinRequest(id, familyId);
+            familyUsecase.joinRequest(id, inviteCode);
         } catch (FamilyContainsUserException e) {
             return APIResponse.builder()
                     .code(-1)
@@ -79,5 +83,33 @@ public class FamilyController extends DefaultController {
                     .build();
         }
         return APIResponse.builder().build();
+    }
+
+    @GetMapping("/family-join-request")
+    public APIResponse getFamilyJoinRequest(
+            @LoginId long id, HttpServletRequest req, HttpServletResponse res
+    ){
+        List<FamilyJoinReqDTO> waitList = familyUsecase.getMyFamilyJoinRequest(id, FamilyJoinStatus.WAIT);
+        List<FamilyJoinReqDTO> approveList = familyUsecase.getMyFamilyJoinRequest(id, FamilyJoinStatus.APPROVE);
+        List<FamilyJoinReqDTO> denyList = familyUsecase.getMyFamilyJoinRequest(id, FamilyJoinStatus.DENY);
+        Map map = new HashMap<>();
+        map.put("waitList",waitList);
+        map.put("approveList",approveList);
+        map.put("denyList",denyList);
+        return APIResponse.builder().data(map).build();
+    }
+
+    @GetMapping("/my-join-request")
+    public APIResponse getMyJoinRequest(
+            @LoginId long id, HttpServletRequest req, HttpServletResponse res
+    ){
+        List<FamilyJoinReqDTO> waitList = familyUsecase.getMyJoinRequest(id,FamilyJoinStatus.WAIT);
+        List<FamilyJoinReqDTO> approveList = familyUsecase.getMyJoinRequest(id, FamilyJoinStatus.APPROVE);
+        List<FamilyJoinReqDTO> denyList = familyUsecase.getMyJoinRequest(id, FamilyJoinStatus.DENY);
+        Map map = new HashMap<>();
+        map.put("waitList",waitList);
+        map.put("approveList",approveList);
+        map.put("denyList",denyList);
+        return APIResponse.builder().data(map).build();
     }
 }
