@@ -1,8 +1,6 @@
 package com.seaweed.hm.modules.item.service;
 
-import com.seaweed.hm.modules.item.dto.ItemDTO;
 import com.seaweed.hm.modules.item.entity.Item;
-import com.seaweed.hm.modules.item.entity.ItemClass;
 import com.seaweed.hm.modules.item.repository.ItemRepository;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,8 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public List<Item> getItemList(long classId){
-        return itemRepository.findListByClassId(classId);
+    public List<Item> getItemListOfFamily(long familyId){
+        return itemRepository.findListByFamilyId(familyId);
     }
 
     public Item regist(Item item) {

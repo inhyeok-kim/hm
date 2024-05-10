@@ -1,6 +1,7 @@
 package com.seaweed.hm.modules.item.dto;
 
 import com.seaweed.hm.modules.item.entity.Item;
+import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.enums.ItemType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +11,16 @@ import lombok.NoArgsConstructor;
 public class ItemDTO{
     private long id;
     private String name;
-    private long classId;
+    private long familyId;
     private int count;
     private ItemType type;
+    private ItemClassType classType;
 
     public ItemDTO(Item entity){
         this.id = entity.getId();
         this.name = entity.getName();
-        this.classId = entity.getClassId();
+        this.familyId = entity.getFamilyId();
+        this.classType = entity.getClassType();
         this.count = entity.getCount();
         this.type = entity.getType();
     }

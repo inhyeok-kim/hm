@@ -67,6 +67,7 @@ public class FamilyUsecase {
         familyService.requestJoin(req);
     }
 
+
     /**
      * 사용자의 가족 가입 요청 목록을 가져오는 usecase
      * @param loginId

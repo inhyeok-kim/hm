@@ -8,9 +8,9 @@ import java.util.Arrays;
 @Getter
 public enum ItemClassType {
     LIVING("생활용품","1"),
-    FURNITURE("가구","2"),
-    APPLIANCES("가전","3"),
-    FOOD("음식","4");
+    CONSUMABLES("소모품","2"),
+    FURNITURE("가구가전","3"),
+    FOOD("식료품","4");
 
     private String code;
     private String name;

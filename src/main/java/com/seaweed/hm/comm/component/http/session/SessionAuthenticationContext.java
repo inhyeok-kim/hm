@@ -12,7 +12,7 @@ public class SessionAuthenticationContext {
     }
 
     public static boolean isAuthenticated(HttpSession session){
-        return (long) session.getAttribute(SESSION_LOGIN_NAME) > 0;
+        return session.getAttribute(SESSION_LOGIN_NAME) != null && (long) session.getAttribute(SESSION_LOGIN_NAME) > 0;
     }
 
     public static void authenticate(HttpSession session, long userId) throws Exception {

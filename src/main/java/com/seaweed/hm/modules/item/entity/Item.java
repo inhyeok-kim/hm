@@ -2,6 +2,7 @@ package com.seaweed.hm.modules.item.entity;
 
 import com.seaweed.hm.comm.abstracts.entity.DefaultEntity;
 import com.seaweed.hm.modules.item.enums.ItemClassType;
+import com.seaweed.hm.modules.item.enums.ItemClassTypeConverter;
 import com.seaweed.hm.modules.item.enums.ItemType;
 import com.seaweed.hm.modules.item.enums.ItemTypeConverter;
 import com.seaweed.hm.modules.user.entity.User;
@@ -15,31 +16,24 @@ import lombok.*;
 @Getter
 public class Item extends DefaultEntity {
     private String name;
-    @Column(name = "class_id")
-    private long classId;
+    private long familyId;
+    @Column(name = "cnt")
     private int count;
 
-    @ManyToOne(targetEntity = ItemClass.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "class_id", insertable = false, updatable = false, foreignKey = @ForeignKey(value=ConstraintMode.NO_CONSTRAINT))
-    private ItemClass itemClass;
+    @Convert(converter = ItemClassTypeConverter.class)
+    private ItemClassType classType;
+    
     @Convert(converter = ItemTypeConverter.class)
     private ItemType type;
 
-    @Builder
-    public Item(String name, long classId, int count, ItemType type){
-        this.name = name;
-        this.classId = classId;
-        this.count = count;
-        this.type = type;
-    }
-
     @Builder(builderMethodName = "registBuilder")
-    public Item(long createUserId,String name, long classId, ItemType type, int count){
+    public Item(long createUserId,String name, long familyId, ItemType type, ItemClassType classType,int count){
         this.name = name;
-        this.classId = classId;
+        this.familyId = familyId;
         this.createUserId = createUserId;
         this.type = type;
         this.count = count;
+        this.classType = classType;
     }
 
     public Item modifyName(long updateUserId, String name){
@@ -53,9 +47,15 @@ public class Item extends DefaultEntity {
         return this;
     }
 
-    public Item modifyClass(long updateUserId, long classId){
+    public Item modifyFamily(long updateUserId, long familyId){
         this.lastModifyUserId = updateUserId;
-        this.classId = classId;
+        this.familyId = familyId;
+        return this;
+    }
+
+    public Item modifyClassType(long updateUserId, ItemClassType classType){
+        this.lastModifyUserId = updateUserId;
+        this.classType = classType;
         return this;
     }
 
@@ -65,7 +65,13 @@ public class Item extends DefaultEntity {
         return this;
     }
 
+    public Item plusCount(long updateUserId, int count){
+        this.count += count;
+        this.lastModifyUserId = updateUserId;
+        return this;
+    }
+
     public boolean isAccessible(User user){
-        return user.getFamilyId() == this.itemClass.getFamilyId();
+        return user.getFamilyId() == this.familyId;
     }
 }
