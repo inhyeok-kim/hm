@@ -4,6 +4,9 @@ import com.seaweed.hm.modules.item.entity.Item;
 import com.seaweed.hm.modules.item.repository.ItemRepository;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +18,8 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public List<Item> getItemListOfFamily(long familyId){
-        return itemRepository.findListByFamilyId(familyId);
+    public Page<Item> getItemListOfFamily(long familyId, Pageable pageable){
+        return itemRepository.findListByFamilyId(familyId, pageable);
     }
 
     public Item regist(Item item) {

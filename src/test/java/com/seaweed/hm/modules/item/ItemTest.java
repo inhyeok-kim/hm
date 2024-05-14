@@ -1,5 +1,6 @@
 package com.seaweed.hm.modules.item;
 
+import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
 import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.dto.ItemDTO;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
@@ -56,5 +58,12 @@ public class ItemTest {
         ItemDTO dto = new ItemDTO(itemService.getItem(1));
         itemUsecase.deleteItem(1,dto);
         Assertions.assertNull(itemService.getItem(1));
+    }
+
+    @Test
+    void selectItemTest() throws NotFoundException, NoSuchMethodException {
+        PageList<ItemDTO> list = itemUsecase.getItemListOfFamily(1, Pageable.ofSize(20));
+
+        System.out.println(list);
     }
 }

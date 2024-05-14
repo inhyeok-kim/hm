@@ -1,19 +1,17 @@
 package com.seaweed.hm.modules.item.usecase;
 
+import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
 import com.seaweed.hm.modules.item.dto.ItemDTO;
 import com.seaweed.hm.modules.item.entity.Item;
-import com.seaweed.hm.modules.item.enums.ItemClassType;
-import com.seaweed.hm.modules.item.enums.ItemType;
 import com.seaweed.hm.modules.item.service.ItemService;
 import com.seaweed.hm.modules.user.entity.User;
 import com.seaweed.hm.modules.user.service.SimpleUserService;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -50,6 +48,7 @@ public class ItemUsecase {
 
     /**
      * item을 수정하는 usecase
+     * family는 수정할 수 없다.
      * @param userId
      * @param itemDTO
      * @return ItemDTO
@@ -64,7 +63,7 @@ public class ItemUsecase {
         if(!item.isAccessible(user)) throw new UnAuthorizationException("");
         item.modifyName(userId,itemDTO.getName())
                 .modifyType(userId,itemDTO.getType())
-                .modifyFamily(userId,itemDTO.getFamilyId())
+                .modifyClassType(userId,itemDTO.getClassType())
                 .modifyCount(userId,itemDTO.getCount());
 
         return new ItemDTO(itemService.modify(item));
@@ -93,11 +92,12 @@ public class ItemUsecase {
      * @return
      * @throws NotFoundException 소속 가족이 없는 경우
      */
-    public List<ItemDTO> getItemListOfFamily(long loginId) throws NotFoundException {
+    public PageList<ItemDTO> getItemListOfFamily(long loginId, Pageable pageable) throws NotFoundException, NoSuchMethodException {
         User user = simpleUserService.getUserById(loginId);
         if(!user.hasFamily()) throw new NotFoundException("");
+        PageList<ItemDTO> pageList = new PageList<>(itemService.getItemListOfFamily(user.getFamilyId(), pageable),Item.class,ItemDTO.class);
 
-        return itemService.getItemListOfFamily(user.getFamilyId()).stream().map(ItemDTO::new).toList();
+        return pageList;
     }
 
     /**
