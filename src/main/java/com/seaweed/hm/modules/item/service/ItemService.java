@@ -1,6 +1,7 @@
 package com.seaweed.hm.modules.item.service;
 
 import com.seaweed.hm.modules.item.entity.Item;
+import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.repository.ItemRepository;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
 
-    public Page<Item> getItemListOfFamily(long familyId, Pageable pageable){
-        return itemRepository.findListByFamilyId(familyId, pageable);
+    public Page<Item> getItemListOfFamily(long familyId, ItemClassType classType, Pageable pageable){
+        return itemRepository.findListByFamilyIdAndClassType(familyId, classType, pageable);
     }
 
     public Item regist(Item item) {

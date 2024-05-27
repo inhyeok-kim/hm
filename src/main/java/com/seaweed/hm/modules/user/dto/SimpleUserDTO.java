@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class SimpleUserDTO {
-    private long id;
-    private String uid;
+//    private long id;
+    private String id;
     private String name;
     private long familyId;
 
 
     public SimpleUserDTO(User entity){
-        this.id = entity.getId();
-        this.uid = entity.getUid();
+//        this.id = entity.getId();
+        this.id = entity.getUid();
         this.name = entity.getName();
         this.familyId = entity.getFamilyId();
     }

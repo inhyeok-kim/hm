@@ -5,6 +5,7 @@ import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
 import com.seaweed.hm.modules.item.dto.ItemDTO;
+import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.enums.ItemType;
 import com.seaweed.hm.modules.item.usecase.ItemUsecase;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/item")
@@ -73,10 +75,11 @@ public class ItemController {
             HttpServletRequest request,
             HttpServletResponse response
             , @PageableDefault(page = 0, size = 20) Pageable pageable
-    ){
+            , @RequestParam(name = "classType")ItemClassType itemClassType
+            ){
         PageList<ItemDTO> list = null;
         try {
-            list = itemUsecase.getItemListOfFamily(loginId,pageable);
+            list = itemUsecase.getItemListOfFamily(loginId,itemClassType,pageable);
         } catch (NotFoundException e) {
             return APIResponse.builder().code(-1).message("존재하지 않는 분류입니다.").build();
         } catch (NoSuchMethodException e) {
@@ -101,5 +104,25 @@ public class ItemController {
         } catch (NotFoundException e) {
             return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
         }
+    }
+
+    @PostMapping("/count_plus")
+    public APIResponse countPlus(
+            @LoginId long loginId,
+            @RequestBody Map body,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
+        long itemId = (int)body.get("id");
+        int count = (int) body.get("count");
+        ItemDTO itemDTO;
+        try {
+            itemDTO = itemUsecase.countPlusItem(loginId,itemId, count);
+        } catch (UnAuthorizationException e) {
+            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
+        } catch (NotFoundException e) {
+            return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
+        }
+        return APIResponse.builder().data(itemDTO).build();
     }
 }

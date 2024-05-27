@@ -62,7 +62,7 @@ public class ItemTest {
 
     @Test
     void selectItemTest() throws NotFoundException, NoSuchMethodException {
-        PageList<ItemDTO> list = itemUsecase.getItemListOfFamily(1, Pageable.ofSize(20));
+        PageList<ItemDTO> list = itemUsecase.getItemListOfFamily(1, ItemClassType.FOOD, Pageable.ofSize(20));
 
         System.out.println(list);
     }

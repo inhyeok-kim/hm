@@ -4,6 +4,7 @@ import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
 import com.seaweed.hm.modules.item.dto.ItemDTO;
 import com.seaweed.hm.modules.item.entity.Item;
+import com.seaweed.hm.modules.item.enums.ItemClassType;
 import com.seaweed.hm.modules.item.service.ItemService;
 import com.seaweed.hm.modules.user.entity.User;
 import com.seaweed.hm.modules.user.service.SimpleUserService;
@@ -92,10 +93,10 @@ public class ItemUsecase {
      * @return
      * @throws NotFoundException 소속 가족이 없는 경우
      */
-    public PageList<ItemDTO> getItemListOfFamily(long loginId, Pageable pageable) throws NotFoundException, NoSuchMethodException {
+    public PageList<ItemDTO> getItemListOfFamily(long loginId, ItemClassType classType, Pageable pageable) throws NotFoundException, NoSuchMethodException {
         User user = simpleUserService.getUserById(loginId);
         if(!user.hasFamily()) throw new NotFoundException("");
-        PageList<ItemDTO> pageList = new PageList<>(itemService.getItemListOfFamily(user.getFamilyId(), pageable),Item.class,ItemDTO.class);
+        PageList<ItemDTO> pageList = new PageList<>(itemService.getItemListOfFamily(user.getFamilyId(), classType, pageable),Item.class,ItemDTO.class);
 
         return pageList;
     }
@@ -118,4 +119,16 @@ public class ItemUsecase {
             throw new UnAuthorizationException("");
         }
     }
+
+    public ItemDTO countPlusItem(long userId, long itemId, int count) throws UnAuthorizationException, NotFoundException {
+        User user = simpleUserService.getUserById(userId);
+        Item item = itemService.getItem(itemId);
+        if(item == null) throw new NotFoundException("");
+
+        if(!item.isAccessible(user)) throw new UnAuthorizationException("");
+        item.plusCount(userId,count);
+
+        return new ItemDTO(itemService.modify(item));
+    }
+
 }
