@@ -56,7 +56,7 @@ public class ItemTest {
     @DisplayName("Item 삭제 usecase 테스트")
     void deleteItemTest() throws UnAuthorizationException, NotFoundException {
         ItemDTO dto = new ItemDTO(itemService.getItem(1));
-        itemUsecase.deleteItem(1,dto);
+        itemUsecase.deleteItem(1,1);
         Assertions.assertNull(itemService.getItem(1));
     }
 

@@ -74,13 +74,13 @@ public class ItemUsecase {
     /**
      * item을 삭제하는 usecase
      * @param userId
-     * @param itemDTO
+     * @param itemId
      * @throws UnAuthorizationException 삭제 대상 itemClass가 사용자의 소속 가족이 아닐경우
      * @throws NotFoundException 삭제 대상이 존재하지 않을 경우
      */
-    public void deleteItem(long userId, ItemDTO itemDTO) throws UnAuthorizationException, NotFoundException {
+    public void deleteItem(long userId, long itemId) throws UnAuthorizationException, NotFoundException {
         User user = simpleUserService.getUserById(userId);
-        Item item = itemService.getItem(itemDTO.getId());
+        Item item = itemService.getItem(itemId);
         if(item == null) throw new NotFoundException("");
 
         if(!item.isAccessible(user)) throw new UnAuthorizationException("");

@@ -69,6 +69,21 @@ public class ItemController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public APIResponse deleteItem(
+            @LoginId long loginId,
+            @PathVariable("id") long itemId
+    ){
+        try {
+            itemUsecase.deleteItem(loginId,itemId);
+            return APIResponse.builder().build();
+        } catch (UnAuthorizationException e) {
+            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
+        } catch (NotFoundException e) {
+            return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
+        }
+    }
+
     @GetMapping("/list")
     public APIResponse getItemList(
             @LoginId long loginId,
