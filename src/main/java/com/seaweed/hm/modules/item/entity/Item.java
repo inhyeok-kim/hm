@@ -26,14 +26,18 @@ public class Item extends DefaultEntity {
     @Convert(converter = ItemTypeConverter.class)
     private ItemType type;
 
+    @Lob
+    private String thumbnail;
+
     @Builder(builderMethodName = "registBuilder")
-    public Item(long createUserId,String name, long familyId, ItemType type, ItemClassType classType,int count){
+    public Item(long createUserId,String name, long familyId, ItemType type, ItemClassType classType,int count,String thumbnail){
         this.name = name;
         this.familyId = familyId;
         this.createUserId = createUserId;
         this.type = type;
         this.count = count;
         this.classType = classType;
+        this.thumbnail = thumbnail;
     }
 
     public Item modifyName(long updateUserId, String name){
@@ -56,6 +60,12 @@ public class Item extends DefaultEntity {
     public Item modifyClassType(long updateUserId, ItemClassType classType){
         this.lastModifyUserId = updateUserId;
         this.classType = classType;
+        return this;
+    }
+
+    public Item modifyThumbnail(long updateUserId, String thumbnail){
+        this.lastModifyUserId = updateUserId;
+        this.thumbnail = thumbnail;
         return this;
     }
 

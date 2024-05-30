@@ -65,7 +65,8 @@ public class ItemUsecase {
         item.modifyName(userId,itemDTO.getName())
                 .modifyType(userId,itemDTO.getType())
                 .modifyClassType(userId,itemDTO.getClassType())
-                .modifyCount(userId,itemDTO.getCount());
+                .modifyCount(userId,itemDTO.getCount())
+                .modifyThumbnail(userId, itemDTO.getThumbnail());
 
         return new ItemDTO(itemService.modify(item));
     }

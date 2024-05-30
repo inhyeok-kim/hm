@@ -19,4 +19,10 @@ public class SessionAuthenticationContext {
         SimpleSessionContext.addLoginSession(userId,session);
         session.setAttribute(SESSION_LOGIN_NAME, userId);
     }
+
+    public static void expireAuthentication(HttpSession session){
+        long loginId = getLoginId(session);
+        SimpleSessionContext.removeLoginSession(loginId,session);
+        session.removeAttribute(SESSION_LOGIN_NAME);
+    }
 }

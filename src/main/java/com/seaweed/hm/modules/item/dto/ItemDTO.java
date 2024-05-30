@@ -15,6 +15,7 @@ public class ItemDTO{
     private int count;
     private ItemType type;
     private ItemClassType classType;
+    private String thumbnail;
 
     public ItemDTO(Item entity){
         this.id = entity.getId();
@@ -23,5 +24,6 @@ public class ItemDTO{
         this.classType = entity.getClassType();
         this.count = entity.getCount();
         this.type = entity.getType();
+        this.thumbnail = entity.getThumbnail();
     }
 }
