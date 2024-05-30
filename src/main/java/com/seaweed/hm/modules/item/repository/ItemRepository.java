@@ -12,4 +12,6 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Page<Item> findListByFamilyIdAndClassType(long familyId, ItemClassType classType, Pageable pageable);
+
+    List<Item> findByFamilyIdAndNameContainingIgnoreCase(long familyId, String name);
 }

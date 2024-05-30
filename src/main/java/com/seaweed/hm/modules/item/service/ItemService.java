@@ -43,4 +43,8 @@ public class ItemService {
         Optional<Item> item = itemRepository.findById(id);
         return item.orElse(null);
     }
+
+    public List<Item> searchItem(long familyId, String keyword){
+        return itemRepository.findByFamilyIdAndNameContainingIgnoreCase(familyId,keyword);
+    }
 }

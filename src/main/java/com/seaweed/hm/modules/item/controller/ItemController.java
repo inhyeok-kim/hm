@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -119,6 +120,21 @@ public class ItemController {
         } catch (NotFoundException e) {
             return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
         }
+    }
+
+    @GetMapping("/search")
+    public APIResponse searchItem(
+            @LoginId long loginId,
+            HttpServletResponse response,
+            HttpServletRequest request,
+            @RequestParam(name="keyword") String keyword
+    ){
+        if(!StringUtils.hasText(keyword)){
+            return APIResponse.builder().data(new ArrayList<>()).build();
+        }
+        List<ItemDTO> list = itemUsecase.searchItem(loginId,keyword);
+
+        return APIResponse.builder().data(list).build();
     }
 
     @PostMapping("/count_plus")

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ItemUsecase {
@@ -130,6 +132,12 @@ public class ItemUsecase {
         item.plusCount(userId,count);
 
         return new ItemDTO(itemService.modify(item));
+    }
+
+    public List<ItemDTO> searchItem(long loginId, String keyword) {
+        User user = simpleUserService.getUserById(loginId);
+        List<Item> itemList = itemService.searchItem(user.getFamilyId(), keyword);
+        return itemList.stream().map(ItemDTO::new).toList();
     }
 
 }

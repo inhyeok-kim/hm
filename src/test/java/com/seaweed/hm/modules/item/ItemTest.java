@@ -18,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -65,5 +67,11 @@ public class ItemTest {
         PageList<ItemDTO> list = itemUsecase.getItemListOfFamily(1, ItemClassType.FOOD, Pageable.ofSize(20));
 
         System.out.println(list);
+    }
+
+    @Test
+    void searchTest(){
+        List<ItemDTO> itemList = itemUsecase.searchItem(1,"만두");
+        System.out.println(itemList);
     }
 }
