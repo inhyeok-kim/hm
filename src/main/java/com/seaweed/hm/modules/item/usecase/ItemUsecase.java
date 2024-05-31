@@ -44,6 +44,7 @@ public class ItemUsecase {
                 .count(dto.getCount())
                 .name(dto.getName())
                 .classType(dto.getClassType())
+                .thumbnail(dto.getThumbnail())
                 .build();
         Item newItemClass = itemService.regist(item);
         return new ItemDTO(newItemClass);

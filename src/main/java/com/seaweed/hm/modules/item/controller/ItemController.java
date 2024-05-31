@@ -10,6 +10,7 @@ import com.seaweed.hm.modules.item.enums.ItemType;
 import com.seaweed.hm.modules.item.usecase.ItemUsecase;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/item")
+@Slf4j
 public class ItemController {
 
     @Autowired
@@ -126,9 +128,9 @@ public class ItemController {
     public APIResponse searchItem(
             @LoginId long loginId,
             HttpServletResponse response,
-            HttpServletRequest request,
-            @RequestParam(name="keyword") String keyword
+            HttpServletRequest request
     ){
+        String keyword = request.getParameter("keyword");
         if(!StringUtils.hasText(keyword)){
             return APIResponse.builder().data(new ArrayList<>()).build();
         }
