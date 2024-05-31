@@ -70,7 +70,7 @@ public class ItemUsecase {
                 .modifyCount(userId,itemDTO.getCount())
                 .modifyThumbnail(userId, itemDTO.getThumbnail());
 
-        return new ItemDTO(itemService.modify(item));
+        return new ItemDTO(item);
     }
 
 

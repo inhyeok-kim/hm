@@ -8,12 +8,14 @@ import com.seaweed.hm.modules.item.enums.ItemTypeConverter;
 import com.seaweed.hm.modules.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity(name="item")
 @Table(name = "ITEM")
 @NoArgsConstructor
 @ToString
 @Getter
+@DynamicUpdate
 public class Item extends DefaultEntity {
     private String name;
     private long familyId;
