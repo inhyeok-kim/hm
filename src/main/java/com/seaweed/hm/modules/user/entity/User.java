@@ -1,7 +1,7 @@
 package com.seaweed.hm.modules.user.entity;
 
 import com.seaweed.hm.comm.abstracts.entity.DefaultEntity;
-import com.seaweed.hm.modules.family.entity.Family;
+import com.seaweed.hm.modules.family.domain.entity.Family;
 import jakarta.persistence.*;
 import lombok.*;
 

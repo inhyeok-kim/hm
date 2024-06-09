@@ -1,14 +1,13 @@
 package com.seaweed.hm.modules.family;
 
-import com.seaweed.hm.modules.family.dto.FamilyDTO;
-import com.seaweed.hm.modules.family.dto.FamilyJoinReqDTO;
-import com.seaweed.hm.modules.family.dto.FamilyJoinUserDTO;
-import com.seaweed.hm.modules.family.entity.Family;
-import com.seaweed.hm.modules.family.entity.FamilyJoinReq;
-import com.seaweed.hm.modules.family.enums.FamilyJoinStatus;
-import com.seaweed.hm.modules.family.exception.UserHasFamilyException;
-import com.seaweed.hm.modules.family.service.FamilyService;
-import com.seaweed.hm.modules.family.usecase.FamilyUsecase;
+import com.seaweed.hm.modules.family.domain.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.domain.dto.FamilyJoinReqDTO;
+import com.seaweed.hm.modules.family.domain.dto.FamilyJoinUserDTO;
+import com.seaweed.hm.modules.family.domain.entity.Family;
+import com.seaweed.hm.modules.family.domain.enums.FamilyJoinStatus;
+import com.seaweed.hm.modules.family.presentation.exception.UserHasFamilyException;
+import com.seaweed.hm.modules.family.domain.service.FamilyService;
+import com.seaweed.hm.modules.family.application.FamilyUsecase;
 import com.seaweed.hm.modules.user.entity.User;
 import com.seaweed.hm.modules.user.service.SimpleUserService;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @SpringBootTest(properties = "spring.profiles.active:test")

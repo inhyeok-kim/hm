@@ -1,0 +1,151 @@
+package com.seaweed.hm.modules.item.application;
+
+import com.seaweed.hm.comm.component.collections.PageList;
+import com.seaweed.hm.comm.exception.UnAuthorizationException;
+import com.seaweed.hm.modules.item.domain.dto.ItemDTO;
+import com.seaweed.hm.modules.item.domain.model.entity.Item;
+import com.seaweed.hm.modules.item.domain.model.enums.ItemClassType;
+import com.seaweed.hm.modules.user.entity.User;
+import com.seaweed.hm.modules.user.repository.UserRepository;
+import com.seaweed.hm.modules.user.service.SimpleUserService;
+import org.apache.ibatis.javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class ItemService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private com.seaweed.hm.modules.item.domain.service.ItemService itemService;
+
+    @Autowired
+    private SimpleUserService simpleUserService;
+
+    /**
+     * item을 신규 생성하는 usecase
+     * @param userId
+     * @param dto
+     * @return
+     * @throws UnAuthorizationException 사용자가 소속 가족이 없을 경우
+     */
+    public ItemDTO createItem(long userId, ItemDTO dto) throws UnAuthorizationException {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if(userOpt.isEmpty()) throw new UnAuthorizationException("");
+
+        User user = userOpt.get();
+        if(user.getFamilyId() == 0) throw new UnAuthorizationException("");
+
+        Item item = Item.registBuilder()
+                .familyId(user.getFamilyId())
+                .createUserId(userId)
+                .type(dto.getType())
+                .count(dto.getCount())
+                .name(dto.getName())
+                .classType(dto.getClassType())
+                .thumbnail(dto.getThumbnail())
+                .build();
+        Item newItemClass = itemService.regist(item);
+        return new ItemDTO(newItemClass);
+    }
+
+    /**
+     * item을 수정하는 usecase
+     * family는 수정할 수 없다.
+     * @param userId
+     * @param itemDTO
+     * @return ItemDTO
+     * @throws UnAuthorizationException 수정 대상 itemClass가 사용자의 소속 가족이 아닐경우
+     * @throws NotFoundException 수정 대상이 존재하지 않을 경우
+     */
+    public ItemDTO updateItem(long userId, ItemDTO itemDTO) throws UnAuthorizationException, NotFoundException {
+        User user = simpleUserService.getUserById(userId);
+        Item item = itemService.getItem(itemDTO.getId());
+        if(item == null) throw new NotFoundException("");
+
+        if(!item.isAccessible(user)) throw new UnAuthorizationException("");
+        item.modifyName(userId,itemDTO.getName())
+                .modifyType(userId,itemDTO.getType())
+                .modifyClassType(userId,itemDTO.getClassType())
+                .modifyCount(userId,itemDTO.getCount())
+                .modifyThumbnail(userId, itemDTO.getThumbnail());
+
+        return new ItemDTO(item);
+    }
+
+
+    /**
+     * item을 삭제하는 usecase
+     * @param userId
+     * @param itemId
+     * @throws UnAuthorizationException 삭제 대상 itemClass가 사용자의 소속 가족이 아닐경우
+     * @throws NotFoundException 삭제 대상이 존재하지 않을 경우
+     */
+    public void deleteItem(long userId, long itemId) throws UnAuthorizationException, NotFoundException {
+        User user = simpleUserService.getUserById(userId);
+        Item item = itemService.getItem(itemId);
+        if(item == null) throw new NotFoundException("");
+
+        if(!item.isAccessible(user)) throw new UnAuthorizationException("");
+        itemService.remove(item);
+    }
+
+    /**
+     * 사용자 family의 item 목록을 가져오는 usecase
+     * @param loginId
+     * @return
+     * @throws NotFoundException 소속 가족이 없는 경우
+     */
+    public PageList<ItemDTO> getItemListOfFamily(long loginId, ItemClassType classType, Pageable pageable) throws NotFoundException, NoSuchMethodException {
+        User user = simpleUserService.getUserById(loginId);
+        if(!user.hasFamily()) throw new NotFoundException("");
+        PageList<ItemDTO> pageList = new PageList<>(itemService.getItemListOfFamily(user.getFamilyId(), classType, pageable),Item.class,ItemDTO.class);
+
+        return pageList;
+    }
+
+    /**
+     * 특정 id의 item을 가져오는 usecase
+     * @param loginId
+     * @param itemId
+     * @return
+     * @throws NotFoundException 해당하는 item이 없는 경우
+     * @throws UnAuthorizationException 해당 item의 class가 소속 가족이 다른 경우
+     */
+    public ItemDTO getItem(long loginId, long itemId) throws NotFoundException, UnAuthorizationException {
+        User user = simpleUserService.getUserById(loginId);
+        Item item = itemService.getItem(itemId);
+        if(item == null) throw new NotFoundException("");
+        if(item.isAccessible(user)){
+            return new ItemDTO(itemService.getItem(itemId));
+        } else {
+            throw new UnAuthorizationException("");
+        }
+    }
+
+    public ItemDTO countPlusItem(long userId, long itemId, int count) throws UnAuthorizationException, NotFoundException {
+        User user = simpleUserService.getUserById(userId);
+        Item item = itemService.getItem(itemId);
+        if(item == null) throw new NotFoundException("");
+
+        if(!item.isAccessible(user)) throw new UnAuthorizationException("");
+        item.plusCount(userId,count);
+
+        return new ItemDTO(itemService.modify(item));
+    }
+
+    public List<ItemDTO> searchItem(long loginId, String keyword) {
+        User user = simpleUserService.getUserById(loginId);
+        List<Item> itemList = itemService.searchItem(user.getFamilyId(), keyword);
+        return itemList.stream().map(ItemDTO::new).toList();
+    }
+
+}

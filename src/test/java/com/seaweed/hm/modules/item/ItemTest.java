@@ -2,11 +2,10 @@ package com.seaweed.hm.modules.item;
 
 import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
-import com.seaweed.hm.modules.item.enums.ItemClassType;
-import com.seaweed.hm.modules.item.dto.ItemDTO;
-import com.seaweed.hm.modules.item.enums.ItemType;
-import com.seaweed.hm.modules.item.service.ItemService;
-import com.seaweed.hm.modules.item.usecase.ItemUsecase;
+import com.seaweed.hm.modules.item.domain.model.enums.ItemClassType;
+import com.seaweed.hm.modules.item.domain.dto.ItemDTO;
+import com.seaweed.hm.modules.item.domain.model.enums.ItemType;
+import com.seaweed.hm.modules.item.application.ItemService;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,10 +25,10 @@ import java.util.List;
 @ActiveProfiles("test")
 public class ItemTest {
     @Autowired
-    private ItemService itemService;
+    private com.seaweed.hm.modules.item.domain.service.ItemService itemService;
 
     @Autowired
-    private ItemUsecase itemUsecase;
+    private ItemService itemUsecase;
 
 
     @Test
