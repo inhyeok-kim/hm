@@ -1,6 +1,6 @@
 package com.seaweed.hm.modules.family.domain.repository;
 
-import com.seaweed.hm.modules.family.domain.entity.Family;
+import com.seaweed.hm.modules.family.domain.model.entity.Family;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface FamilyRepository extends JpaRepository<Family,Long> {
 
-    @Query("SELECT f, u FROM family f LEFT JOIN FETCH f.users u")
+    @Query("SELECT f FROM family f")
     List<Family> findFamilyJoinUser();
 
     @Modifying

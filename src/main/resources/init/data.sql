@@ -14,7 +14,7 @@ INSERT INTO family (create_at,name,invite_code)
 VALUES (now(), 'spyFamily','155eacf3-59c9-37cc-a76d-7b74ecf78297')
  , (now(),'testFamily','8ea22333-2f38-42ce-ac19-89b5be5d69e6');
 
-INSERT INTO family_join_req (create_at, family_id, user_id, status)
+INSERT INTO family_join (create_at, family_id, user_id, status)
 VALUES ( now(), 1, 4, 1 );
 
 

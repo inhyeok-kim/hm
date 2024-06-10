@@ -1,9 +1,8 @@
 package com.seaweed.hm.modules.user;
 
-import com.seaweed.hm.modules.user.dto.SimpleUserDTO;
-import com.seaweed.hm.modules.user.entity.User;
-import com.seaweed.hm.modules.user.service.SimpleUserService;
-import com.seaweed.hm.modules.user.usecase.SimpleUserUsecase;
+import com.seaweed.hm.modules.user.domain.model.dto.SimpleUserDTO;
+import com.seaweed.hm.modules.user.domain.service.SimpleUserService;
+import com.seaweed.hm.modules.user.application.SimpleUserUsecase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

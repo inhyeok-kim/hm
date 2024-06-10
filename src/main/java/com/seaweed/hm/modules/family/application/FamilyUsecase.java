@@ -1,16 +1,16 @@
 package com.seaweed.hm.modules.family.application;
 
 
-import com.seaweed.hm.modules.family.domain.dto.FamilyDTO;
-import com.seaweed.hm.modules.family.domain.dto.FamilyJoinReqDTO;
-import com.seaweed.hm.modules.family.domain.entity.Family;
-import com.seaweed.hm.modules.family.domain.entity.FamilyJoinReq;
-import com.seaweed.hm.modules.family.domain.enums.FamilyJoinStatus;
+import com.seaweed.hm.modules.family.domain.model.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.domain.model.dto.FamilyJoinReqDTO;
+import com.seaweed.hm.modules.family.domain.model.entity.Family;
+import com.seaweed.hm.modules.family.domain.model.entity.FamilyJoin;
+import com.seaweed.hm.modules.family.domain.model.enums.FamilyJoinStatus;
 import com.seaweed.hm.modules.family.presentation.exception.FamilyContainsUserException;
 import com.seaweed.hm.modules.family.presentation.exception.UserHasFamilyException;
 import com.seaweed.hm.modules.family.domain.service.FamilyService;
-import com.seaweed.hm.modules.user.entity.User;
-import com.seaweed.hm.modules.user.service.SimpleUserService;
+import com.seaweed.hm.modules.user.domain.model.entity.User;
+import com.seaweed.hm.modules.user.domain.service.SimpleUserService;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,10 +59,7 @@ public class FamilyUsecase {
             throw new UserHasFamilyException("이미 가입된 가족이 존재합니다.");
         }
         Family family = familyService.getFamilyByInviteCode(inviteCode);
-        if(family.containsUser(userId)){
-            throw new FamilyContainsUserException("이미 가입된 가족입니다.");
-        }
-        FamilyJoinReq req = FamilyJoinReq.NewRequest().familyId(family.getId()).userId(userId).build();
+        FamilyJoin req = FamilyJoin.NewRequest().familyId(family.getId()).userId(userId).build();
         familyService.requestJoin(req);
     }
 
@@ -96,7 +93,7 @@ public class FamilyUsecase {
      */
     public FamilyDTO findMyFamily(long loginId) {
         User user = simpleUserService.getUserById(loginId);
-        Family myFamily = user.getFamily();
+        Family myFamily = familyService.getFamily(user.getFamilyId());
         if(!user.hasFamily()) return null;
         return new FamilyDTO(myFamily);
     }
@@ -109,7 +106,7 @@ public class FamilyUsecase {
      */
     public String refreshInviteCode(long id) throws NotFoundException {
         User user = simpleUserService.getUserById(id);
-        Family family = user.getFamily();
+        Family family = familyService.getFamily(user.getFamilyId());
         if(family == null) throw new NotFoundException("소속된 가족이 존재하지 않습니다.");
         family.refreshInviteCode();
         familyService.updateInviteCode(family);

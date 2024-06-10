@@ -1,11 +1,12 @@
 package com.seaweed.hm.modules.item.domain.model.entity;
 
 import com.seaweed.hm.comm.abstracts.entity.DefaultEntity;
+import com.seaweed.hm.comm.exception.UnAuthorizationException;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemClassType;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemClassTypeConverter;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemType;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemTypeConverter;
-import com.seaweed.hm.modules.user.entity.User;
+import com.seaweed.hm.modules.user.domain.model.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -33,58 +34,67 @@ public class Item extends DefaultEntity {
     private String thumbnail;
 
     @Builder(builderMethodName = "registBuilder")
-    public Item(long createUserId,String name, long familyId, ItemType type, ItemClassType classType,int count,String thumbnail){
+    public Item(User createUser,String name, long familyId, ItemType type, ItemClassType classType,int count,String thumbnail) throws UnAuthorizationException {
+        if(!createUser.hasFamily()) throw new UnAuthorizationException("접근 권한이 없습니다.");
         this.name = name;
         this.familyId = familyId;
-        this.createUserId = createUserId;
+        this.createUserId = createUser.getId();
         this.type = type;
         this.count = count;
         this.classType = classType;
         this.thumbnail = thumbnail;
     }
 
-    public Item modifyName(long updateUserId, String name){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyName(User user, String name) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.name = name;
         return this;
     }
-    public Item modifyType(long updateUserId, ItemType type){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyType(User user, ItemType type) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.type = type;
         return this;
     }
 
-    public Item modifyFamily(long updateUserId, long familyId){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyFamily(User user, long familyId) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.familyId = familyId;
         return this;
     }
 
-    public Item modifyClassType(long updateUserId, ItemClassType classType){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyClassType(User user, ItemClassType classType) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.classType = classType;
         return this;
     }
 
-    public Item modifyThumbnail(long updateUserId, String thumbnail){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyThumbnail(User user, String thumbnail) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.thumbnail = thumbnail;
         return this;
     }
 
-    public Item modifyCount(long updateUserId, int count){
-        this.lastModifyUserId = updateUserId;
+    public Item modifyCount(User user, int count) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.count = count;
         return this;
     }
 
-    public Item plusCount(long updateUserId, int count){
+    public Item plusCount(User user, int count) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
         this.count += count;
-        this.lastModifyUserId = updateUserId;
         return this;
     }
 
     public boolean isAccessible(User user){
         return user.getFamilyId() == this.familyId;
     }
+
 }

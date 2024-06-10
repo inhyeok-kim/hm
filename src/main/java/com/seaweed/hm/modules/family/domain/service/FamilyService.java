@@ -1,10 +1,10 @@
 package com.seaweed.hm.modules.family.domain.service;
 
 
-import com.seaweed.hm.modules.family.domain.enums.FamilyJoinStatus;
+import com.seaweed.hm.modules.family.domain.model.enums.FamilyJoinStatus;
 import com.seaweed.hm.modules.family.domain.repository.FamilyRepository;
-import com.seaweed.hm.modules.family.domain.entity.Family;
-import com.seaweed.hm.modules.family.domain.entity.FamilyJoinReq;
+import com.seaweed.hm.modules.family.domain.model.entity.Family;
+import com.seaweed.hm.modules.family.domain.model.entity.FamilyJoin;
 import com.seaweed.hm.modules.family.domain.repository.FamilyJoinReqRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,15 +52,15 @@ public class FamilyService {
     }
 
     @Transactional
-    public void requestJoin(FamilyJoinReq req) {
+    public void requestJoin(FamilyJoin req) {
         familyJoinReqRepository.save(req);
     }
 
-    public List<FamilyJoinReq> getFamilyJoinReqByUser(long userId, FamilyJoinStatus status) {
+    public List<FamilyJoin> getFamilyJoinReqByUser(long userId, FamilyJoinStatus status) {
         return familyJoinReqRepository.findAllByUserIdAndStatus(userId,status);
     }
 
-    public List<FamilyJoinReq> getFamilyJoinReqByFamily(long familyId, FamilyJoinStatus status) {
+    public List<FamilyJoin> getFamilyJoinReqByFamily(long familyId, FamilyJoinStatus status) {
         return familyJoinReqRepository.findAllByFamilyIdAndStatus(familyId,status);
     }
 }

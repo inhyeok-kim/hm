@@ -4,6 +4,7 @@ import com.seaweed.hm.comm.argument.LoginId;
 import com.seaweed.hm.comm.component.collections.PageList;
 import com.seaweed.hm.comm.component.http.response.APIResponse;
 import com.seaweed.hm.comm.exception.UnAuthorizationException;
+import com.seaweed.hm.modules.item.application.ItemQueryService;
 import com.seaweed.hm.modules.item.domain.dto.ItemDTO;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemClassType;
 import com.seaweed.hm.modules.item.application.ItemService;
@@ -28,7 +29,10 @@ import java.util.Map;
 public class ItemController {
 
     @Autowired
-    private ItemService itemUsecase;
+    private ItemService itemService;
+
+    @Autowired
+    private ItemQueryService itemQueryService;
 
     @PostMapping("")
     public APIResponse createItem(@LoginId long loginId, HttpServletResponse response, HttpServletRequest request, @RequestBody ItemDTO dto) throws BadRequestException {
@@ -42,7 +46,7 @@ public class ItemController {
 
 
         try {
-            ItemDTO result = itemUsecase.createItem(loginId,dto);
+            ItemDTO result = itemService.createItem(loginId,dto);
             return APIResponse.builder().data(result).build();
         } catch (UnAuthorizationException e) {
             return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
@@ -61,7 +65,7 @@ public class ItemController {
         }
 
         try {
-            ItemDTO result = itemUsecase.updateItem(loginId,dto);
+            ItemDTO result = itemService.updateItem(loginId,dto);
             return APIResponse.builder().data(result).build();
         } catch (UnAuthorizationException e) {
             return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
@@ -76,7 +80,7 @@ public class ItemController {
             @PathVariable("id") long itemId
     ){
         try {
-            itemUsecase.deleteItem(loginId,itemId);
+            itemService.deleteItem(loginId,itemId);
             return APIResponse.builder().build();
         } catch (UnAuthorizationException e) {
             return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
@@ -93,9 +97,9 @@ public class ItemController {
             , @PageableDefault(page = 0, size = 20) Pageable pageable
             , @RequestParam(name = "classType")ItemClassType itemClassType
             ){
-        PageList<ItemDTO> list = null;
+        List<ItemDTO> list = null;
         try {
-            list = itemUsecase.getItemListOfFamily(loginId,itemClassType,pageable);
+            list = itemQueryService.getItemListOfFamily(loginId,itemClassType,pageable);
         } catch (NotFoundException e) {
             return APIResponse.builder().code(-1).message("존재하지 않는 분류입니다.").build();
         } catch (NoSuchMethodException e) {
@@ -113,12 +117,10 @@ public class ItemController {
             HttpServletResponse response
     ){
         try {
-            ItemDTO itemClassDTO = itemUsecase.getItem(loginId,itemId);
+            ItemDTO itemClassDTO = itemQueryService.getItem(loginId,itemId);
             return APIResponse.builder().data(itemClassDTO).build();
-        } catch (UnAuthorizationException e) {
-            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
-        } catch (NotFoundException e) {
-            return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
+        } catch (UnAuthorizationException | NotFoundException e) {
+            return APIResponse.builder().code(-1).message(e.getMessage()).build();
         }
     }
 
@@ -132,7 +134,7 @@ public class ItemController {
         if(!StringUtils.hasText(keyword)){
             return APIResponse.builder().data(new ArrayList<>()).build();
         }
-        List<ItemDTO> list = itemUsecase.searchItem(loginId,keyword);
+        List<ItemDTO> list = itemQueryService.searchItem(loginId,keyword);
 
         return APIResponse.builder().data(list).build();
     }
@@ -148,11 +150,9 @@ public class ItemController {
         int count = (int) body.get("count");
         ItemDTO itemDTO;
         try {
-            itemDTO = itemUsecase.countPlusItem(loginId,itemId, count);
-        } catch (UnAuthorizationException e) {
-            return APIResponse.builder().code(-1).message("잘못된 접근입니다.").build();
-        } catch (NotFoundException e) {
-            return APIResponse.builder().code(-1).message("존재하지 않는 재고입니다..").build();
+            itemDTO = itemService.countPlusItem(loginId,itemId, count);
+        } catch (UnAuthorizationException | NotFoundException e) {
+            return APIResponse.builder().code(-1).message(e.getMessage()).build();
         }
         return APIResponse.builder().data(itemDTO).build();
     }

@@ -3,11 +3,13 @@ package com.seaweed.hm.modules.item.domain.dto;
 import com.seaweed.hm.modules.item.domain.model.entity.Item;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemClassType;
 import com.seaweed.hm.modules.item.domain.model.enums.ItemType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ItemDTO{
     private long id;
     private String name;

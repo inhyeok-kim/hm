@@ -1,15 +1,17 @@
 package com.seaweed.hm.modules.family;
 
-import com.seaweed.hm.modules.family.domain.dto.FamilyDTO;
-import com.seaweed.hm.modules.family.domain.dto.FamilyJoinReqDTO;
-import com.seaweed.hm.modules.family.domain.dto.FamilyJoinUserDTO;
-import com.seaweed.hm.modules.family.domain.entity.Family;
-import com.seaweed.hm.modules.family.domain.enums.FamilyJoinStatus;
+import com.seaweed.hm.modules.family.application.FamilyJoinService;
+import com.seaweed.hm.modules.family.domain.model.dto.FamilyDTO;
+import com.seaweed.hm.modules.family.domain.model.dto.FamilyJoinDTO;
+import com.seaweed.hm.modules.family.domain.model.dto.FamilyJoinReqDTO;
+import com.seaweed.hm.modules.family.domain.model.entity.Family;
+import com.seaweed.hm.modules.family.domain.model.enums.FamilyJoinStatus;
+import com.seaweed.hm.modules.family.domain.repository.FamilyRepository;
 import com.seaweed.hm.modules.family.presentation.exception.UserHasFamilyException;
 import com.seaweed.hm.modules.family.domain.service.FamilyService;
 import com.seaweed.hm.modules.family.application.FamilyUsecase;
-import com.seaweed.hm.modules.user.entity.User;
-import com.seaweed.hm.modules.user.service.SimpleUserService;
+import com.seaweed.hm.modules.user.domain.model.entity.User;
+import com.seaweed.hm.modules.user.domain.service.SimpleUserService;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(properties = "spring.profiles.active:test")
 @AutoConfigureMockMvc
@@ -29,10 +32,16 @@ import java.util.List;
 public class FamilyTest {
 
     @Autowired
+    private FamilyRepository familyRepository;
+
+    @Autowired
     private FamilyService familyService;
 
     @Autowired
     private FamilyUsecase familyUsecase;
+
+    @Autowired
+    private FamilyJoinService familyJoinService;
 
     @Autowired
     private SimpleUserService simpleUserService;
@@ -54,7 +63,6 @@ public class FamilyTest {
     @Transactional
     void testFamilyUsers(){
         List<Family> list = familyService.getFamilyListAll();
-        System.out.println(list.stream().map(FamilyJoinUserDTO::new).toList());
     }
 
     @Test
@@ -88,7 +96,7 @@ public class FamilyTest {
 
     @Test
     void testJoinRequest(){
-        List<FamilyJoinReqDTO> list = familyUsecase.getMyJoinRequest(4, FamilyJoinStatus.WAIT);
+        List<FamilyJoinDTO> list = familyJoinService.getMyJoinRequest(4, FamilyJoinStatus.WAIT);
         System.out.println(list);
     }
 
@@ -96,5 +104,13 @@ public class FamilyTest {
     void testFamilyJoinRequest(){
         List<FamilyJoinReqDTO> list = familyUsecase.getMyFamilyJoinRequest(1, FamilyJoinStatus.WAIT);
         System.out.println(list);
+    }
+
+    @Test
+    void testFamily(){
+        Optional<Family> familyOpt = familyRepository.findById(1L);
+        if(familyOpt.isPresent()){
+            System.out.println(familyOpt.get());
+        }
     }
 }
