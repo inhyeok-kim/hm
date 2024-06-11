@@ -1,4 +1,4 @@
-package com.seaweed.hm.application;
+package com.seaweed.hm.application.item;
 
 import com.seaweed.hm.comm.http.exception.UnAuthorizationException;
 import com.seaweed.hm.application.item.query.ItemQueryService;

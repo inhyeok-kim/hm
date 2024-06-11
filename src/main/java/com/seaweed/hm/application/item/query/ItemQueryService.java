@@ -3,7 +3,7 @@ package com.seaweed.hm.application.item.query;
 import com.seaweed.hm.comm.http.exception.UnAuthorizationException;
 import com.seaweed.hm.domain.item.dto.ItemDTO;
 import com.seaweed.hm.domain.item.enums.ItemClassType;
-import com.seaweed.hm.domain.item.repository.ItemQueryRepository;
+import com.seaweed.hm.domain.item.repository.query.ItemQueryRepository;
 import com.seaweed.hm.domain.item.repository.ItemRepository;
 import com.seaweed.hm.domain.user.entity.User;
 import com.seaweed.hm.domain.user.repository.UserRepository;

@@ -1,4 +1,4 @@
-package com.seaweed.hm.domain.item.repository;
+package com.seaweed.hm.domain.item.repository.query;
 
 import com.seaweed.hm.domain.item.enums.ItemClassType;
 import com.seaweed.hm.domain.item.dto.ItemDTO;
