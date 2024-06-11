@@ -1,6 +1,6 @@
 package com.seaweed.hm.comm.config.filter;
 
-import com.seaweed.hm.modules.auth.enums.Role;
+import com.seaweed.hm.domain.user.enums.Role;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

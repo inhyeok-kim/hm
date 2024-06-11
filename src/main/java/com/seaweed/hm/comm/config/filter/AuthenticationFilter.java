@@ -1,7 +1,7 @@
 package com.seaweed.hm.comm.config.filter;
 
-import com.seaweed.hm.comm.abstracts.filter.SimpleFilter;
-import com.seaweed.hm.comm.component.http.session.SessionAuthenticationContext;
+import com.seaweed.hm.abstracts.filter.SimpleFilter;
+import com.seaweed.hm.comm.http.session.SessionAuthenticationContext;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
