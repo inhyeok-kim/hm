@@ -18,10 +18,11 @@ public class ItemQueryRepository {
 
     public ItemDTO findByIdAndFamilyId(long id, long familyId){
         TypedQuery<ItemDTO> query = em.createQuery("select new com.seaweed.hm.domain.item.dto.ItemDTO(" +
-                "   id, name, familyId, count, type, classType, thumbnail" +
+                "   a.id, a.name, a.familyId, a.count, a.type, a.classType, a.thumbnail, COALESCE(b.id,0), b.name" +
                 ") " +
-                "from item " +
-                "where id = :id and familyId = :familyId",ItemDTO.class);
+                " from item as a" +
+                "   left outer join itemCategory as b on a.categoryId = b.id" +
+                " where a.id = :id and a.familyId = :familyId",ItemDTO.class);
         query.setParameter("id",id);
         query.setParameter("familyId",familyId);
         return query.getResultList().stream().findAny().orElse(null);
@@ -29,10 +30,11 @@ public class ItemQueryRepository {
 
     public List<ItemDTO> findListByFamilyIdAndClassType(long familyId, ItemClassType classType, Pageable pageable){
         TypedQuery<ItemDTO> query = em.createQuery("select new com.seaweed.hm.domain.item.dto.ItemDTO(" +
-                "   id, name, familyId, count, type, classType, thumbnail" +
+                "   a.id, a.name, a.familyId, a.count, a.type, a.classType, a.thumbnail, COALESCE(b.id,0), b.name" +
                 ") " +
-                "from item " +
-                "where classType = :classType and familyId = :familyId",ItemDTO.class);
+                " from item as a" +
+                "   left outer join itemCategory as b on a.categoryId = b.id" +
+                " where a.classType = :classType and a.familyId = :familyId",ItemDTO.class);
         query.setParameter("classType",classType);
         query.setParameter("familyId",familyId);
         query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
@@ -42,10 +44,11 @@ public class ItemQueryRepository {
 
     public List<ItemDTO> findByFamilyIdAndNameKeyword(long familyId, String keyword){
         TypedQuery<ItemDTO> query = em.createQuery("select new com.seaweed.hm.domain.item.dto.ItemDTO(" +
-                "   id, name, familyId, count, type, classType, thumbnail" +
+                "   a.id, a.name, a.familyId, a.count, a.type, a.classType, a.thumbnail, COALESCE(b.id,0), b.name" +
                 ") " +
-                "from item " +
-                "where name like concat('%',:keyword,'%') and familyId = :familyId",ItemDTO.class);
+                " from item as a" +
+                "   left outer join itemCategory as b on a.categoryId = b.id" +
+                " where a.name like concat('%',:keyword,'%') and a.familyId = :familyId",ItemDTO.class);
         query.setParameter("keyword",keyword);
         query.setParameter("familyId",familyId);
         return query.getResultList();

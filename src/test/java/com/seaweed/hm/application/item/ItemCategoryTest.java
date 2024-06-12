@@ -31,11 +31,17 @@ public class ItemCategoryTest {
     private UserRepository userRepository;
 
     @Test
-    void test() throws UnAuthorizationException {
+    void testRootList() throws UnAuthorizationException {
         User user = userRepository.findById(1L).get();
-        ItemCategory itemCategory = ItemCategory.rootBuilder().creator(user).name("Food").build();
-        itemCategoryRepository.save(itemCategory);
-        List<ItemCategoryDTO> list =  itemCategoryQueryRepository.findByFamilyIdAndOrder(1,1);
+        List<ItemCategoryDTO> list =  itemCategoryQueryRepository.findRootByFamilyIdAndOrder(1,1);
+
+        System.out.println(list);
+    }
+
+    @Test
+    void testChildreList() {
+        User user = userRepository.findById(1L).get();
+        List<ItemCategoryDTO> list =  itemCategoryQueryRepository.findByParentIdAndOrder(1,1);
 
         System.out.println(list);
 

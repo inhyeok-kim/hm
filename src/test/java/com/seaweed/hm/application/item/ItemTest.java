@@ -6,6 +6,7 @@ import com.seaweed.hm.domain.item.enums.ItemClassType;
 import com.seaweed.hm.domain.item.dto.ItemDTO;
 import com.seaweed.hm.domain.item.enums.ItemType;
 import com.seaweed.hm.application.item.command.ItemService;
+import com.seaweed.hm.domain.item.repository.ItemRepository;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,9 @@ public class ItemTest {
     private ItemService itemService;
 
     @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
     private ItemQueryService itemQueryService;
 
 
@@ -41,6 +45,7 @@ public class ItemTest {
         dto.setClassType(ItemClassType.FOOD);
         dto.setName("멸치칼국수");
         dto.setCount(8);
+        dto.setCategoryId(1);
         ItemDTO item = itemService.createItem(1,dto);
         Assertions.assertEquals(dto.getName(),itemQueryService.getItem(1,item.getId()).getName());
     }

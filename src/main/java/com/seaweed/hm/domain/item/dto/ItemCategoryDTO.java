@@ -17,5 +17,4 @@ public class ItemCategoryDTO {
     private long parentId;
     private long familyId;
     private boolean isRoot;
-
 }

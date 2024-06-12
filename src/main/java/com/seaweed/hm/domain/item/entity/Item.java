@@ -24,6 +24,8 @@ public class Item extends DefaultEntity {
     @Column(name = "cnt")
     private int count;
 
+    private long categoryId;
+
     @Convert(converter = ItemClassTypeConverter.class)
     private ItemClassType classType;
     
@@ -34,7 +36,7 @@ public class Item extends DefaultEntity {
     private String thumbnail;
 
     @Builder(builderMethodName = "registBuilder")
-    public Item(User createUser, String name, long familyId, ItemType type, ItemClassType classType, int count, String thumbnail) throws UnAuthorizationException {
+    public Item(User createUser, String name, long familyId, ItemType type, ItemClassType classType, int count, String thumbnail,long categoryId) throws UnAuthorizationException {
         if(!createUser.hasFamily()) throw new UnAuthorizationException("접근 권한이 없습니다.");
         this.name = name;
         this.familyId = familyId;
@@ -43,8 +45,15 @@ public class Item extends DefaultEntity {
         this.count = count;
         this.classType = classType;
         this.thumbnail = thumbnail;
+        this.categoryId = categoryId;
     }
 
+    public Item modifyCategory(User user, ItemCategory category) throws UnAuthorizationException {
+        if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
+        this.lastModifyUserId = user.getId();
+        this.categoryId = category.getId();
+        return this;
+    }
     public Item modifyName(User user, String name) throws UnAuthorizationException {
         if(!isAccessible(user)) throw new UnAuthorizationException("접근 권한이 없습니다.");
         this.lastModifyUserId = user.getId();

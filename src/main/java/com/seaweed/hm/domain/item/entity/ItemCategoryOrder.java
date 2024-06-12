@@ -18,7 +18,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class ItemCategoryOrder {
     @EmbeddedId
-    @AttributeOverride(name="itemCategoryId", column = @Column(name="itemCategoryId"))
     private ItemCategoryOrderID id;
 
     private int orderNum;

@@ -52,6 +52,7 @@ public class ItemService {
                 .name(dto.getName())
                 .classType(dto.getClassType())
                 .thumbnail(dto.getThumbnail())
+                .categoryId(dto.getCategoryId())
                 .build();
         Item newItemClass = itemRepository.save(item);
         return new ItemDTO(newItemClass);

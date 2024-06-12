@@ -18,6 +18,8 @@ public class ItemDTO{
     private ItemType type;
     private ItemClassType classType;
     private String thumbnail;
+    private long categoryId;
+    private String categoryName;
 
     public ItemDTO(Item entity){
         this.id = entity.getId();
